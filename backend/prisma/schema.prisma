@@ -1,0 +1,57 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model cart_items {
+  id           Int       @id @default(autoincrement())
+  user_id      Int
+  product_name String    @db.VarChar(255)
+  product_img  String?   @db.VarChar(255)
+  price        Decimal   @db.Decimal(10, 2)
+  quantity     Int?      @default(1)
+  size         String?   @db.VarChar(10)
+  created_at   DateTime? @default(now()) @db.DateTime(0)
+}
+
+model products {
+  id                Int       @id @default(autoincrement())
+  name              String    @db.VarChar(255)
+  description       String?   @db.Text
+  price             Decimal   @db.Decimal(10, 2)
+  size              String?   @db.VarChar(50)
+  color             String?   @db.VarChar(50)
+  model             String?   @db.VarChar(50)
+  line              String?   @db.VarChar(50)
+  image_url         String?   @db.VarChar(255)
+  back_image_url    String?   @db.VarChar(255)
+  high_res_url      String?   @db.VarChar(255)
+  back_high_res_url String?   @db.VarChar(255)
+  created_at        DateTime? @default(now()) @db.DateTime(0)
+}
+
+model users {
+  id         Int       @id @default(autoincrement())
+  name       String    @db.VarChar(100)
+  phone      String?   @db.VarChar(20)
+  email      String    @unique(map: "email") @db.VarChar(100)
+  password   String    @db.VarChar(255)
+  created_at DateTime? @default(now()) @db.DateTime(0)
+}
+
+model orders {
+  id             Int      @id @default(autoincrement())
+  user_id        Int
+  yampi_order_id String
+  status         String   @default("pending")
+  created_at     DateTime @default(now()) @db.DateTime(0)
+
+  @@map("orders")
+}
+
+
